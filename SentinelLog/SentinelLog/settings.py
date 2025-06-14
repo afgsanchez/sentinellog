@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'daily_activity',
     'incident_management',
     'dashboard',
+    'investigations',
+    'daily_reports',
 
 ]
 
@@ -113,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'CET'
 
 USE_I18N = True
 

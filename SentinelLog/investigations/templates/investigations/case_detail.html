@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card bg-dark text-light border-secondary mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-info"><i class="bi bi-folder2-open"></i> {{ case.title }}</h2>
+            <p><strong>Descripción:</strong> {{ case.description }}</p>
+            <p><strong>Creado por:</strong> {{ case.created_by }}</p>
+            <p><strong>Fecha de creación:</strong> {{ case.created_at }}</p>
+            <p><strong>Estado:</strong>
+                {% if case.is_closed %}
+                    <span class="badge bg-danger">Cerrado</span>
+                {% else %}
+                    <span class="badge bg-success">Abierto</span>
+                {% endif %}
+            </p>
+            {% if case.pdf_last_saved %}
+                <p><strong>📅 Última vez que se guardó el PDF:</strong> {{ case.pdf_last_saved|date:"d/m/Y H:i" }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h4><i class="bi bi-paperclip"></i> Documentos</h4>
+        <a href="{% url 'add_document' case.id %}" class="btn btn-outline-info btn-sm mb-2">➕ Añadir documento</a>
+        <ul class="list-group list-group-flush">
+            {% for document in documents %}
+                <li class="list-group-item bg-dark text-light">
+                    <a href="{{ document.file.url }}" target="_blank" class="text-info">
+                        {{ document.description|default:"Documento sin descripción" }}
+                    </a>
+                    <small class="text-muted d-block">Subido por: {{ document.uploaded_by }} el {{ document.uploaded_at|date:"d/m/Y H:i" }}</small>
+                </li>
+            {% empty %}
+                <li class="list-group-item bg-dark text-light">No hay documentos adjuntos.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mb-4">
+        <h4><i class="bi bi-chat-dots"></i> Comentarios</h4>
+        <a href="{% url 'add_comment' case.id %}" class="btn btn-outline-info btn-sm mb-2">➕ Añadir comentario</a>
+        <ul class="list-group list-group-flush">
+            {% for comment in comments %}
+                <li class="list-group-item bg-dark text-light">
+                    <strong>{{ comment.author }}</strong> <small class="text-muted">({{ comment.created_at|date:"d/m/Y H:i" }})</small><br>
+                    {{ comment.comment }}
+                </li>
+            {% empty %}
+                <li class="list-group-item bg-dark text-light">No hay comentarios.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mb-4">
+        <h4><i class="bi bi-mic"></i> Entrevistas</h4>
+        <a href="{% url 'add_interview' case.id %}" class="btn btn-outline-info btn-sm mb-2">➕ Añadir entrevista</a>
+        <ul class="list-group list-group-flush">
+            {% for interview in interviews %}
+                <li class="list-group-item bg-dark text-light">
+                    <strong>{{ interview.person_name }}</strong> ({{ interview.role }}) - {{ interview.date|date:"d/m/Y" }}<br>
+                    {{ interview.summary }}<br>
+                    <em class="text-muted">Conducida por: {{ interview.conducted_by }}</em>
+                </li>
+            {% empty %}
+                <li class="list-group-item bg-dark text-light">No hay entrevistas registradas.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mb-4">
+        <h4><i class="bi bi-pencil-square"></i> Conclusiones</h4>
+        <form action="{% url 'save_pdf_report' case.id %}" method="post">
+            {% csrf_token %}
+            <textarea name="conclusiones" rows="5" class="form-control bg-dark text-light border-secondary" placeholder="Escribe aquí las conclusiones del caso...">{{ case.conclusiones }}</textarea>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    💾 Guardar reporte PDF en el servidor
+                </button>
+                <form action="{% url 'generate_pdf_report' case.id %}" method="get" target="_blank">
+                    <button type="submit" class="btn btn-secondary">
+                        📄 Descargar reporte PDF
+                    </button>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

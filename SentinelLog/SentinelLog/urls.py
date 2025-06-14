@@ -23,6 +23,8 @@ urlpatterns = [
     path('daily_activity/', include('daily_activity.urls')),
     path('incident_management/', include('incident_management.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('investigations/', include('investigations.urls')),
+    path('daily_reports/', include('daily_reports.urls')),
     path('', include('dashboard.urls')),
 
 ]

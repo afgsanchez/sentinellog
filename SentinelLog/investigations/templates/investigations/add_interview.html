@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🗣️ Añadir entrevista al caso: {{ case.title }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar entrevista</button>
+</form>
+
+<a href="{% url 'case_detail' case.id %}">⬅ Volver al caso</a>
+{% endblock %}

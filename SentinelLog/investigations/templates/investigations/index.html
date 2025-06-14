@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Casos de Investigación</h2>
+
+<a href="{% url 'add_case' %}">➕ Añadir nuevo caso</a>
+
+<ul>
+    {% for case in cases %}
+        <li>
+            <a href="{% url 'case_detail' case.id %}">{{ case.title }}</a>
+            {% if case.is_closed %} <strong>(Cerrado)</strong> {% endif %}
+        </li>
+    {% empty %}
+        <li>No hay casos registrados.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
