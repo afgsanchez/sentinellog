@@ -16,7 +16,7 @@ from .forms import (
 )
 
 def index(request):
-    cases = InvestigationCase.objects.all()
+    cases = InvestigationCase.objects.all().order_by('-created_at')
     return render(request, 'investigations/index.html', {'cases': cases})
 
 def case_detail(request, case_id):
@@ -99,56 +99,7 @@ def add_interview(request, case_id):
 
 from django.utils.timezone import localtime
 
-# def generate_pdf_report(request, case_id):
-#     case = InvestigationCase.objects.get(id=case_id)
-#     conclusiones = case.conclusiones or "No se proporcionaron conclusiones."
 
-#     pdf = FPDF()
-#     pdf.add_page()
-#     pdf.set_font("Arial", 'B', 16)
-#     pdf.cell(0, 10, "Reporte de Caso de Investigación", ln=True, align='C')
-
-#     pdf.set_font("Arial", 'B', 12)
-#     pdf.cell(0, 10, f"Título: {case.title}", ln=True)
-#     pdf.set_font("Arial", '', 12)
-#     pdf.multi_cell(0, 10, f"Descripción: {case.description}")
-
-#     pdf.ln(5)
-#     pdf.set_font("Arial", 'B', 12)
-#     pdf.cell(0, 10, "Documentos Adjuntos:", ln=True)
-#     for doc in case.documents.all():
-#         pdf.set_font("Arial", '', 12)
-#         pdf.cell(0, 10, f"- {doc.description or doc.file.name}", ln=True)
-
-#     pdf.ln(5)
-#     pdf.set_font("Arial", 'B', 12)
-#     pdf.cell(0, 10, "Comentarios:", ln=True)
-#     for comment in case.comments.all():
-#         pdf.set_font("Arial", '', 12)
-#         pdf.multi_cell(0, 10, f"{comment.author} ({comment.created_at}): {comment.comment}")
-
-#     pdf.ln(5)
-#     pdf.set_font("Arial", 'B', 12)
-#     pdf.cell(0, 10, "Entrevistas:", ln=True)
-#     for interview in case.interviews.all():
-#         pdf.set_font("Arial", '', 12)
-#         pdf.multi_cell(0, 10, f"{interview.person_name} ({interview.role}) - {interview.date}:\n{interview.summary}")
-
-#     pdf.ln(5)
-#     pdf.set_font("Arial", 'B', 12)
-#     pdf.cell(0, 10, "Conclusiones:", ln=True)
-#     pdf.set_font("Arial", '', 12)
-#     pdf.multi_cell(0, 10, conclusiones)
-
-#     # Fecha de generación
-#     if case.pdf_last_saved:
-#         pdf.ln(10)
-#         pdf.set_font("Arial", 'I', 10)
-#         pdf.cell(0, 10, f"PDF generado el: {localtime(case.pdf_last_saved).strftime('%d/%m/%Y %H:%M')}", ln=True)
-
-#     response = HttpResponse(pdf.output(dest='S').encode('latin1'), content_type='application/pdf')
-#     response['Content-Disposition'] = f'attachment; filename=caso_{case.id}_reporte.pdf'
-#     return response
 
 def generate_pdf_report(request, case_id):
     save_path = os.path.join('investigations', 'reports', f'caso_{case_id}_reporte.pdf')

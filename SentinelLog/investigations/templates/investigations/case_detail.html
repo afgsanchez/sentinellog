@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="{% url 'investigations_index' %}" class="btn btn-link mt-3">
+            ⬅ Volver al listado de casos
+        </a>
 <div class="container">
     <div class="card bg-dark text-light border-secondary mb-4">
         <div class="card-body">
@@ -30,7 +33,7 @@
 
 
             {% if case.pdf_last_saved %}
-                <p><strong>📅 Última vez que se guardó el PDF:</strong> {{ case.pdf_last_saved|date:"d/m/Y H:i" }}</p>
+                <p><strong>📅 Última modificación:</strong> {{ case.pdf_last_saved|date:"d/m/Y H:i" }}</p>
             {% endif %}
         </div>
     </div>
@@ -44,7 +47,7 @@
                     <a href="{{ document.file.url }}" target="_blank" class="text-info">
                         {{ document.description|default:"Documento sin descripción" }}
                     </a>
-                    <small class="text-muted d-block">Subido por: {{ document.uploaded_by }} el {{ document.uploaded_at|date:"d/m/Y H:i" }}</small>
+                    <small class="d-block">Subido por: {{ document.uploaded_by }} el {{ document.uploaded_at|date:"d/m/Y H:i" }}</small>
                 </li>
             {% empty %}
                 <li class="list-group-item bg-dark text-light">No hay documentos adjuntos.</li>
@@ -58,7 +61,7 @@
         <ul class="list-group list-group-flush">
             {% for comment in comments %}
                 <li class="list-group-item bg-dark text-light">
-                    <strong>{{ comment.author }}</strong> <small class="text-muted">({{ comment.created_at|date:"d/m/Y H:i" }})</small><br>
+                    <strong>{{ comment.author }}</strong> <small>({{ comment.created_at|date:"d/m/Y H:i" }})</small><br>
                     {{ comment.comment }}
                 </li>
             {% empty %}
@@ -75,7 +78,7 @@
                 <li class="list-group-item bg-dark text-light">
                     <strong>{{ interview.person_name }}</strong> ({{ interview.role }}) - {{ interview.date|date:"d/m/Y" }}<br>
                     {{ interview.summary }}<br>
-                    <em class="text-muted">Conducida por: {{ interview.conducted_by }}</em>
+                    <em>Conducida por: {{ interview.conducted_by }}</em>
                 </li>
             {% empty %}
                 <li class="list-group-item bg-dark text-light">No hay entrevistas registradas.</li>
@@ -93,7 +96,7 @@
                 <form action="{% url 'save_pdf_report' case.id %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-primary">
-                        💾 Guardar reporte PDF en el servidor
+                        💾 Guardar cambios
                     </button>
                 </form>
                 <!-- Formulario para descargar el PDF -->

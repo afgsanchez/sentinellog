@@ -1,13 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>📎 Añadir documento al caso: {{ case.title }}</h2>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Subir documento</button>
-</form>
-
-<a href="{% url 'case_detail' case.id %}">⬅ Volver al caso</a>
+<div class="card mx-auto mt-4" style="max-width: 600px;">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0">📎 Añadir documento al caso: {{ case.title }}</h4>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ form.file.id_for_label }}" class="form-label"></label>
+                {{ form.file }}
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.description }}
+                <label for="{{ form.description.id_for_label }}">Descripción del documento</label>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-2">
+                Subir documento
+            </button>
+        </form>
+        <a href="{% url 'case_detail' case.id %}" class="btn btn-link mt-3">
+            ⬅ <b>Volver al caso</b>
+        </a>
+    </div>
+</div>
 {% endblock %}

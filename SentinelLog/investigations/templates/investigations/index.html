@@ -4,13 +4,13 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Casos de Investigación</h2>
     <a href="{% url 'add_case' %}" class="btn btn-primary">
-        ➕ Añadir nuevo caso
+        Añadir nuevo caso
     </a>
 </div>
 
 <div class="list-group">
     {% for case in cases %}
-        <a href="{% url 'case_detail' case.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <a href="{% url 'case_detail' case.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-dark text-light">
             <span>
                 <i class="bi bi-folder2-open"></i> {{ case.title }}
             </span>

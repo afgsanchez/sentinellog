@@ -1,13 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>🗣️ Añadir entrevista al caso: {{ case.title }}</h2>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar entrevista</button>
-</form>
-
-<a href="{% url 'case_detail' case.id %}">⬅ Volver al caso</a>
+<div class="card mx-auto mt-4" style="max-width: 600px;">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0">🗣️ Añadir entrevista al caso: {{ case.title }}</h4>
+    </div>
+    <div class="card-body">
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                {{ form.person_name }}
+                <label for="{{ form.person_name.id_for_label }}">Nombre de la persona</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.role }}
+                <label for="{{ form.role.id_for_label }}">Rol/Cargo</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.summary }}
+                <label for="{{ form.summary.id_for_label }}">Resumen de la entrevista</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.date }}
+                <label for="{{ form.date.id_for_label }}">Fecha</label>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-2">
+                Guardar entrevista
+            </button>
+            <p class="text-muted mt-2">
+                No olvide adjuntar los documentos relevantes en la sección de archivos del caso.
+                Asegúrate de que la información es correcta antes de guardar.
+            </p>
+        </form>
+        <a href="{% url 'case_detail' case.id %}" class="btn btn-link mt-3">
+            ⬅ Volver al caso
+        </a>
+    </div>
+</div>
 {% endblock %}
