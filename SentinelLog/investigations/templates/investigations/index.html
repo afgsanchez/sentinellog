@@ -1,18 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Casos de Investigación</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Casos de Investigación</h2>
+    <a href="{% url 'add_case' %}" class="btn btn-primary">
+        ➕ Añadir nuevo caso
+    </a>
+</div>
 
-<a href="{% url 'add_case' %}">➕ Añadir nuevo caso</a>
-
-<ul>
+<div class="list-group">
     {% for case in cases %}
-        <li>
-            <a href="{% url 'case_detail' case.id %}">{{ case.title }}</a>
-            {% if case.is_closed %} <strong>(Cerrado)</strong> {% endif %}
-        </li>
+        <a href="{% url 'case_detail' case.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <span>
+                <i class="bi bi-folder2-open"></i> {{ case.title }}
+            </span>
+            {% if case.is_closed %}
+                <span class="badge bg-danger">Cerrado</span>
+            {% else %}
+                <span class="badge bg-success">Abierto</span>
+            {% endif %}
+        </a>
     {% empty %}
-        <li>No hay casos registrados.</li>
+        <div class="alert alert-info mb-0">
+            No hay casos registrados.
+        </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

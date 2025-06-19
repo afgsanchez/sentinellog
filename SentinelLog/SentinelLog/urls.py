@@ -16,15 +16,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+def root_redirect(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard') # o la vista principal tras login
+    return redirect('account_login')
+
+
 
 urlpatterns = [
+    path('', root_redirect),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('daily_activity/', include('daily_activity.urls')),
     path('incident_management/', include('incident_management.urls')),
-    path('dashboard/', include('dashboard.urls')),
-    path('investigations/', include('investigations.urls')),
     path('daily_reports/', include('daily_reports.urls')),
-    path('', include('dashboard.urls')),
-
-]
+    path('investigations/', include('investigations.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

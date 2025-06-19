@@ -10,4 +10,5 @@ urlpatterns = [
     path('case/<int:case_id>/interview/add/', views.add_interview, name='add_interview'),
     path('case/<int:case_id>/report/pdf/', views.generate_pdf_report, name='generate_pdf_report'),
     path('cases/<int:case_id>/save_pdf/', views.save_pdf_report, name='save_pdf_report'),
+    path('case/<int:case_id>/toggle_status/', views.toggle_case_status, name='toggle_case_status'),
 ]

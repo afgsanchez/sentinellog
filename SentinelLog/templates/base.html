@@ -55,13 +55,19 @@
 
     <header class="d-flex flex-column flex-md-row align-items-center justify-content-between">
         <h1><i class="bi bi-shield-lock-fill"></i> SentinelLog</h1>
+
         <nav class="mt-3 mt-md-0">
             <a href="/dashboard/">Dashboard</a>
             <a href="/daily_activity/">Actividades</a>
             <a href="/incident_management/">Incidentes</a>
             <a href="/daily_reports/">Informes Diarios</a>
             <a href="/investigations/">Investigaciones</a>
-            <a href="/accounts/login/">Login</a>
+            {% if user.is_authenticated %}
+            <span><b>| Hola, {{ user }} |</b></span>
+            <a href="{% url 'account_logout' %}">Logout</a>
+            {% else %}
+                <a href="/accounts/login/">Login</a>
+            {% endif %}
         </nav>
     </header>
 

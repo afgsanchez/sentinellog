@@ -10,6 +10,17 @@ class InvestigationCaseForm(forms.ModelForm):
     class Meta:
         model = InvestigationCase
         fields = ['title', 'description', 'is_closed']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Título del caso'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Descripción del caso',
+                'rows': 4
+            }),
+        }
 
 class InvestigationDocumentForm(forms.ModelForm):
     class Meta:
