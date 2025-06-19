@@ -19,6 +19,14 @@
             {% else %}
                 <span class="badge bg-success">Abierto</span>
             {% endif %}
+        
+            <p class="mb-1"><strong>Fecha de creación:</strong> {{ case.created_at|date:"d/m/Y H:i" }}</p>
+
+            <form action="{% url 'generate_pdf_report' case.id %}" method="get" target="_blank">
+                    <button type="submit" class="btn btn-secondary">
+                        📄 Descargar reporte PDF
+                    </button>
+                </form>
         </a>
     {% empty %}
         <div class="alert alert-info mb-0">
