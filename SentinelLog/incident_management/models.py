@@ -18,7 +18,8 @@ class Incident(models.Model):
     location = models.CharField(max_length=255)
     description = models.TextField()
     reported_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='incidents_reported')
-    incident_report_pdf = models.FileField(upload_to='incident_reports/pdfs/')
+    # incident_report_pdf = models.FileField(upload_to='incident_reports/pdfs/')
+    incident_report_docx = models.FileField(upload_to='incident_reports/docx/', null=True, blank=True, help_text="Archivo DOCX del Incident Report")
     insurance_case_number = models.CharField(max_length=100, blank=True, help_text="Número de caso de la aseguradora")
     related_investigation = models.ForeignKey(
         'investigations.InvestigationCase',
@@ -42,3 +43,12 @@ class IncidentNote(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     note = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+class IncidentAttachment(models.Model):
+    incident = models.ForeignKey(Incident, on_delete=models.CASCADE, related_name='attachments')
+    file = models.FileField(upload_to='incident_reports/attachments/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.file.name.split('/')[-1]
