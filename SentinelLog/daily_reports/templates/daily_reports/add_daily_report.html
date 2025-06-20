@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mx-auto mt-4" style="max-width: 600px;">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">➕ Subir informe diario</h4>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" autocomplete="off">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100 mt-2">
+                Guardar informe
+            </button>
+        </form>
+        <a href="{% url 'daily_reports_index' %}" class="btn btn-link mt-3">
+            ⬅ Volver al listado de informes
+        </a>
+    </div>
+</div>
+{% endblock %}
