@@ -32,10 +32,11 @@
         </select>
     </div>
     <div class="col-md-2">
-        <input type="text" name="search" class="form-control" placeholder="Buscar en las notas..." value="{{ selected.search|default_if_none:'' }}">
+        <input type="text" name="search" class="form-control" placeholder="Buscar..." value="{{ selected.search|default_if_none:'' }}">
     </div>
-    <div class="col-md-1">
-        <button type="submit" class="btn btn-secondary w-100">Filtrar</button>
+    <div class="col-md-1 d-flex gap-2 align-items-center">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+        <a href="{% url 'daily_reports_index' %}" class="btn btn-success">Limpiar</a>
     </div>
 </form>
 
