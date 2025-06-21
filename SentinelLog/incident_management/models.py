@@ -17,7 +17,7 @@ class Incident(models.Model):
     #     ('otro', 'Otro'),
     # ]
     incident_type = models.ForeignKey(IncidentType, on_delete=models.PROTECT, null=True)
-
+    affected_person = models.CharField("Persona afectada", max_length=100, blank=True, null=True)
     date = models.DateTimeField(help_text="Fecha y hora del incidente")
     location = models.CharField(max_length=255)
     description = models.TextField()

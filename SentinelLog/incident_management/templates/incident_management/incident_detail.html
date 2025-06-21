@@ -13,6 +13,7 @@
     <div class="card-body">
         <h5>{{ incident.get_incident_type_display }} - {{ incident.date|date:"d/m/Y H:i" }}</h5>
         <p><strong>Ubicación:</strong> {{ incident.location }}</p>
+        <p><strong>Persona afectada:</strong> {{ incident.affected_person|default:"-" }}</p>
         <p><strong>Descripción:</strong> {{ incident.description }}</p>
         <p><strong>Reportado por:</strong> {{ incident.reported_by }}</p>
         <p><strong>Caso aseguradora:</strong> {{ incident.insurance_case_number|default:"-" }}</p>

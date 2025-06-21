@@ -170,10 +170,11 @@ def generate_incident_pdf(request, pk):
     pdf.set_font("DejaVu", 'B', 20)
     pdf.set_text_color(0, 51, 102)
     pdf.cell(0, 60, '', ln=True)  # Espacio
-    # pdf.cell(0, 15, f"{incident.get_incident_type_display()}", ln=True, align='C')
-    pdf.cell(0, 15, f"{incident.incident_type.name if incident.incident_type else ''}", ln=True, align='C')
+    pdf.cell(0, 10, f"Incident Report:", ln=True, align='C')
+    #pdf.cell(0, 15, f"{incident.incident_type.name if incident.incident_type else ''}", ln=True, align='C')
     pdf.set_font("DejaVu", '', 14)
     pdf.set_text_color(0, 0, 0)
+    pdf.cell(0, 10, f"Persona afectada: {incident.affected_person or '-'}", ln=True, align='C')
     pdf.cell(0, 10, f"Ubicación: {incident.location}", ln=True, align='C')
     pdf.cell(0, 10, f"Fecha y hora: {incident.date.strftime('%d/%m/%Y %H:%M')}", ln=True, align='C')
     pdf.ln(20)
