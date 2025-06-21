@@ -9,12 +9,12 @@
 </div>
 
 <form method="get" class="row g-2 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-4 w-100">
         <input type="text" name="search" class="form-control" placeholder="Buscar por descripción, ubicación, número de caso o texto del DOCX..." value="{{ search|default_if_none:'' }}">
     </div>
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-secondary w-100">Filtrar</button>
-        <a href="{% url 'incident_management_index' %}" class="btn btn-success w-100 mt-2">Limpiar</a>
+    <div class="col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-secondary w-50">Filtrar</button>
+        <a href="{% url 'incident_management_index' %}" class="btn btn-success w-50">Limpiar</a>
     </div>
 </form>
 
@@ -23,7 +23,7 @@
         <div class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
             <div>
                 <a href="{% url 'incident_detail' incident.pk %}" class="text-light text-decoration-none">
-                    <strong>{{ incident.get_incident_type_display }}</strong> - {{ incident.date|date:"d/m/Y H:i" }}
+                    <strong>{{ incident.incident_type.name }}</strong> - {{ incident.date|date:"d/m/Y H:i" }}
                 </a>
                 <span class="text-info">{{ incident.location }}</span>
                 {% if incident.insurance_case_number %}

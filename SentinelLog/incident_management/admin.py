@@ -20,6 +20,8 @@ class IncidentAdmin(admin.ModelAdmin):
     search_fields = ('description', 'location', 'insurance_case_number')
     inlines = [IncidentPhotoInline, IncidentNoteInline, IncidentAttachmentInline]
 
+admin.site.register(IncidentType)
+
 # Si quieres, puedes registrar IncidentPhoto y IncidentNote por separado:
 # admin.site.register(IncidentPhoto)
 # admin.site.register(IncidentNote)

@@ -1,19 +1,23 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
 
+class IncidentType(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class Incident(models.Model):
-    INCIDENT_TYPE_CHOICES = [
-        ('robo', 'Robo'),
-        ('caida', 'Caída'),
-        ('colision', 'Colisión de Vehículo'),
-        ('golpe', 'Golpe'),
-        ('desmayo', 'Desmayo'),
-        ('otro', 'Otro'),
-    ]
-    incident_type = models.CharField(max_length=20, choices=INCIDENT_TYPE_CHOICES, default='otro')
+    # INCIDENT_TYPE_CHOICES = [
+    #     ('robo', 'Robo'),
+    #     ('caida', 'Caída'),
+    #     ('colision', 'Colisión de Vehículo'),
+    #     ('golpe', 'Golpe'),
+    #     ('desmayo', 'Desmayo'),
+    #     ('otro', 'Otro'),
+    # ]
+    incident_type = models.ForeignKey(IncidentType, on_delete=models.PROTECT, null=True)
+
     date = models.DateTimeField(help_text="Fecha y hora del incidente")
     location = models.CharField(max_length=255)
     description = models.TextField()
@@ -32,7 +36,8 @@ class Incident(models.Model):
     docx_text = models.TextField(blank=True, help_text="Texto extraído del DOCX para búsqueda")
 
     def __str__(self):
-        return f"{self.get_incident_type_display()} - {self.date.strftime('%d/%m/%Y %H:%M')}"
+        tipo = self.incident_type.name if self.incident_type else "Sin tipo"
+        return f"{tipo} - {self.date.strftime('%d/%m/%Y %H:%M')}"
 
 class IncidentPhoto(models.Model):
     incident = models.ForeignKey(Incident, on_delete=models.CASCADE, related_name='photos')
