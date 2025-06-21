@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mt-4">
+    
+    <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Detalle del incidente</h4>
+        <a href="{% url 'edit_incident' incident.pk %}" class="btn btn-warning btn-sm">
+            ✏️ Editar incidente
+        </a>
+    </div>
+
+    <div class="card-body">
+        <h5>{{ incident.get_incident_type_display }} - {{ incident.date|date:"d/m/Y H:i" }}</h5>
+        <p><strong>Ubicación:</strong> {{ incident.location }}</p>
+        <p><strong>Descripción:</strong> {{ incident.description }}</p>
+        <p><strong>Reportado por:</strong> {{ incident.reported_by }}</p>
+        <p><strong>Caso aseguradora:</strong> {{ incident.insurance_case_number|default:"-" }}</p>
+        <p><strong>Investigación relacionada:</strong>
+            {% if incident.related_investigation %}
+                {{ incident.related_investigation.title }}
+            {% else %}
+                -
+            {% endif %}
+        </p>
+        <p><strong>Archivo Incident Report:</strong>
+            {% if incident.incident_report_docx %}
+                <a href="{{ incident.incident_report_docx.url }}" target="_blank" class="btn btn-sm btn-outline-primary">Descargar DOCX</a>
+            {% else %}
+                No adjuntado
+            {% endif %}
+        </p>
+        <hr>
+        <h5>Fotos</h5>
+        <div class="row">
+            {% for photo in photos %}
+                <div class="col-md-3 mb-2">
+                    <img src="{{ photo.image.url }}" class="img-fluid rounded border" alt="Foto incidente">
+                    <div class="small text-muted">
+                        Subido por: {{ photo.uploaded_by }}<br>
+                        {{ photo.uploaded_at|date:"d/m/Y H:i" }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <h6>Añadir foto</h6>
+        <form method="post" enctype="multipart/form-data" class="mb-3">
+            {% csrf_token %}
+            {{ photo_form.as_p }}
+            <button type="submit" name="add_photo" class="btn btn-primary btn-sm">Subir foto</button>
+        </form>
+        <hr>
+        <h5>Archivos adjuntos</h5>
+        <ul>
+            {% for attach in attachments %}
+                <li>
+                    <a href="{{ attach.file.url }}" target="_blank">{{ attach.description|default:attach.file.name|slice:"-30:" }}</a>
+                    <span class="small text-muted">
+                        (Subido por: {{ attach.uploaded_by }}, {{ attach.uploaded_at|date:"d/m/Y H:i" }})
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+        <h6>Añadir archivo adjunto</h6>
+        <form method="post" enctype="multipart/form-data" class="mb-3">
+            {% csrf_token %}
+            {{ attach_form.as_p }}
+            <button type="submit" name="add_attachment" class="btn btn-primary btn-sm">Subir archivo</button>
+        </form>
+        <hr>
+        <h5>Notas</h5>
+        <ul class="list-group">
+            {% for note in notes %}
+                <li class="list-group-item">
+                    <strong>{{ note.author }}:</strong> {{ note.note }} <span class="text-muted float-end">{{ note.created_at|date:"d/m/Y H:i" }}</span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">No hay notas registradas.</li>
+            {% endfor %}
+        </ul>
+        <h5>Añadir nota</h5>
+            <form method="post" class="mb-3">
+                {% csrf_token %}
+                {{ note_form.as_p }}
+                <button type="submit" class="btn btn-primary btn-sm">Añadir nota</button>
+            </form>
+
+        <a href="{% url 'incident_management_index' %}" class="btn btn-link mt-3">
+            ⬅ Volver al listado de incidentes
+        </a>
+        <a href="{% url 'generate_incident_pdf' incident.pk %}" class="btn btn-outline-danger btn-sm ms-2">
+            📄 Descargar informe PDF
+        </a>
+    </div>
+</div>
+{% endblock %}

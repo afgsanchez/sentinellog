@@ -1,6 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Gestión de Incidentes</h2>
-<p>Bienvenido al módulo de incidentes.</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Incidentes</h2>
+    <a href="{% url 'add_incident' %}" class="btn btn-danger">
+        Registrar incidente
+    </a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="Buscar por descripción, ubicación, número de caso o texto del DOCX..." value="{{ search|default_if_none:'' }}">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-secondary w-100">Filtrar</button>
+        <a href="{% url 'incident_management_index' %}" class="btn btn-success w-100 mt-2">Limpiar</a>
+    </div>
+</form>
+
+<div class="list-group">
+    {% for incident in incidents %}
+        <div class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{% url 'incident_detail' incident.pk %}" class="text-light text-decoration-none">
+                    <strong>{{ incident.get_incident_type_display }}</strong> - {{ incident.date|date:"d/m/Y H:i" }}
+                </a>
+                <span class="text-info">{{ incident.location }}</span>
+                {% if incident.insurance_case_number %}
+                    <span class="badge bg-primary ms-2">Caso aseguradora: {{ incident.insurance_case_number }}</span>
+                {% endif %}
+                {% if incident.related_investigation %}
+                    <span class="badge bg-warning text-dark ms-2">Investigación: {{ incident.related_investigation.title }}</span>
+                {% endif %}
+            </div>
+            <a href="{% url 'edit_incident' incident.pk %}" class="btn btn-secondary">
+                Editar
+            </a>
+        </div>
+    {% empty %}
+        <div class="alert alert-info mb-0">
+            No hay incidentes registrados.
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

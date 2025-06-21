@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mx-auto mt-4" style="max-width: 700px;">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">➕ Registrar nuevo incidente</h4>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" autocomplete="off">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100 mt-2">
+                Guardar incidente
+            </button>
+        </form>
+        <a href="{% url 'incident_management_index' %}" class="btn btn-link mt-3">
+            ⬅ Volver al listado de incidentes
+        </a>
+    </div>
+</div>
+{% endblock %}

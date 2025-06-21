@@ -29,6 +29,7 @@ class Incident(models.Model):
         help_text="Relaciona este incidente con una investigación si aplica"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    docx_text = models.TextField(blank=True, help_text="Texto extraído del DOCX para búsqueda")
 
     def __str__(self):
         return f"{self.get_incident_type_display()} - {self.date.strftime('%d/%m/%Y %H:%M')}"
@@ -37,6 +38,7 @@ class IncidentPhoto(models.Model):
     incident = models.ForeignKey(Incident, on_delete=models.CASCADE, related_name='photos')
     image = models.ImageField(upload_to='incident_reports/photos/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
 class IncidentNote(models.Model):
     incident = models.ForeignKey(Incident, on_delete=models.CASCADE, related_name='notes')
@@ -48,6 +50,7 @@ class IncidentAttachment(models.Model):
     incident = models.ForeignKey(Incident, on_delete=models.CASCADE, related_name='attachments')
     file = models.FileField(upload_to='incident_reports/attachments/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
