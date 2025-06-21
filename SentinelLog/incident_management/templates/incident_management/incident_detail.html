@@ -82,7 +82,7 @@
             <form method="post" class="mb-3">
                 {% csrf_token %}
                 {{ note_form.as_p }}
-                <button type="submit" class="btn btn-primary btn-sm">Añadir nota</button>
+                <button type="submit" name="add_note" class="btn btn-primary btn-sm">Añadir nota</button>
             </form>
 
         <a href="{% url 'incident_management_index' %}" class="btn btn-link mt-3">
@@ -91,6 +91,7 @@
         <a href="{% url 'generate_incident_pdf' incident.pk %}" class="btn btn-outline-danger btn-sm ms-2">
             📄 Descargar informe PDF
         </a>
+
     </div>
 </div>
 {% endblock %}

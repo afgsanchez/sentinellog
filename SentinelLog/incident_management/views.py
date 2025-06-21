@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from fpdf import FPDF
 import os
+from io import BytesIO
 
 
 def extract_docx_text(docx_file):
@@ -113,15 +114,6 @@ def incident_detail(request, pk):
         'attach_form': attach_form,
     })
 
-    return render(request, 'incident_management/incident_detail.html', {
-        'incident': incident,
-        'photos': photos,
-        'notes': notes,
-        'attachments': attachments,
-        'note_form': note_form,
-    })
-
-
 def generate_incident_pdf(request, pk):
     incident = get_object_or_404(Incident, pk=pk)
     photos = incident.photos.all()
@@ -132,7 +124,7 @@ def generate_incident_pdf(request, pk):
         def header(self):
             logo_path = os.path.join(os.path.dirname(__file__), 'static', 'SentinelLog_logo.png')
             self.image(logo_path, 10, 8, 33)
-            self.set_font('DejaVu', 'B', 18)
+            self.set_font('DejaVu', 'B', 16)
             self.set_text_color(30, 30, 30)
             self.cell(0, 12, 'MVC Son Antem | Safety & Security', ln=True, align='C')
             self.set_font('DejaVu', '', 12)
@@ -227,7 +219,7 @@ def generate_incident_pdf(request, pk):
             pdf.set_text_color(0, 123, 255)
             pdf.cell(0, 7, f"{attach.file.name.split('/')[-1]}", ln=True)
             pdf.set_font("DejaVu", '', 11)
-            pdf.set_text_color(0, 0,)
+            pdf.set_text_color(0, 0, 0)
             pdf.cell(0, 7, f"Descripción: {attach.description or '-'}", ln=True)
             pdf.cell(0, 7, f"Subido por: {attach.uploaded_by} el {attach.uploaded_at.strftime('%d/%m/%Y %H:%M')}", ln=True)
             pdf.ln(2)
@@ -245,6 +237,12 @@ def generate_incident_pdf(request, pk):
         pdf.set_font("DejaVu", 'I', 11)
         pdf.cell(0, 8, "No hay fotos adjuntas.", ln=True)
 
-    response = HttpResponse(pdf.output(dest='S'), content_type='application/pdf')
+    # --- USAR BytesIO PARA DEVOLVER EL PDF ---
+    from io import BytesIO
+    pdf_buffer = BytesIO()
+    pdf.output(pdf_buffer)
+    pdf_buffer.seek(0)
+
+    response = HttpResponse(pdf_buffer, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename=incidente_{incident.pk}_reporte.pdf'
     return response
