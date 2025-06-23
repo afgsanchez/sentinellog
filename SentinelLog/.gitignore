@@ -1,0 +1,23 @@
+# Python
+*.pyc
+__pycache__/
+
+# FPDF cache
+*.pkl
+
+# Entornos virtuales
+.venv/
+env/
+venv/
+
+# Archivos de configuración de VSCode
+.vscode/
+
+# Archivos de base de datos locales
+# db.sqlite3
+
+# Archivos de logs
+*.log
+
+# Archivos de media subidos por usuarios (opcional, si no quieres subirlos)
+# media/

@@ -158,12 +158,30 @@ def generate_incident_pdf(request, pk):
             self.ln(5)
 
     pdf = CyberReportPDF()
+
     font_dir = os.path.join(os.path.dirname(__file__), 'static', 'fonts')
+    required_fonts = [
+        'DejaVuSans.ttf',
+        'DejaVuSans-Bold.ttf',
+        'DejaVuSans-Oblique.ttf',
+        'DejaVuSans-BoldOblique.ttf'
+    ]
+    for font in required_fonts:
+        font_path = os.path.join(font_dir, font)
+        if not os.path.exists(font_path):
+            raise FileNotFoundError(f"Fuente no encontrada: {font_path}")
+
     pdf.add_font('DejaVu', '', os.path.join(font_dir, 'DejaVuSans.ttf'), uni=True)
     pdf.add_font('DejaVu', 'B', os.path.join(font_dir, 'DejaVuSans-Bold.ttf'), uni=True)
     pdf.add_font('DejaVu', 'I', os.path.join(font_dir, 'DejaVuSans-Oblique.ttf'), uni=True)
     pdf.add_font('DejaVu', 'BI', os.path.join(font_dir, 'DejaVuSans-BoldOblique.ttf'), uni=True)
-    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # font_dir = os.path.join(os.path.dirname(__file__), 'static', 'fonts')
+    # pdf.add_font('DejaVu', '', os.path.join(font_dir, 'DejaVuSans.ttf'), uni=True)
+    # pdf.add_font('DejaVu', 'B', os.path.join(font_dir, 'DejaVuSans-Bold.ttf'), uni=True)
+    # pdf.add_font('DejaVu', 'I', os.path.join(font_dir, 'DejaVuSans-Oblique.ttf'), uni=True)
+    # pdf.add_font('DejaVu', 'BI', os.path.join(font_dir, 'DejaVuSans-BoldOblique.ttf'), uni=True)
+    # pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
 
     # Portada
@@ -240,11 +258,15 @@ def generate_incident_pdf(request, pk):
         pdf.cell(0, 8, "No hay fotos adjuntas.", ln=True)
 
     # --- USAR BytesIO PARA DEVOLVER EL PDF ---
-    from io import BytesIO
-    pdf_buffer = BytesIO()
-    pdf.output(pdf_buffer)
-    pdf_buffer.seek(0)
+    # from io import BytesIO
+    # pdf_buffer = BytesIO()
+    # pdf.output(pdf_buffer)
+    # pdf_buffer.seek(0)
 
-    response = HttpResponse(pdf_buffer, content_type='application/pdf')
+    # response = HttpResponse(pdf_buffer, content_type='application/pdf')
+    pdf_bytes = pdf.output(dest='S').encode('latin1')  # 'S' devuelve el PDF como string (bytes)
+    response = HttpResponse(pdf_bytes, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename=incidente_{incident.pk}_reporte.pdf'
+
+    # response['Content-Disposition'] = f'attachment; filename=incidente_{incident.pk}_reporte.pdf'
     return response
