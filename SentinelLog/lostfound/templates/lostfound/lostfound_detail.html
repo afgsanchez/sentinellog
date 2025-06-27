@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    #print-area, #print-area * {
+        visibility: visible !important;
+    }
+    #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        z-index: 9999;
+        padding: 0;
+        margin: 0;
+    }
+    .no-print, .no-print * {
+        display: none !important;
+    }
+    .list-group-item,
+    .list-group,
+    .card,
+    .card-header,
+    .card-body {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .list-group-item {
+        border-bottom: none !important;
+    }
+}
+@media screen {
+    .only-print {
+        display: none !important;
+    }
+}
+@media print {
+    .only-print {
+        display: block !important;
+    }
+}
+</style>
+
+<div class="no-print mb-3">
+    <button type="button" class="btn btn-outline-primary" onclick="window.print()">🖨️ Imprimir</button>
+    <a href="{% url 'lostfound:edit' item.pk %}" class="btn btn-warning">Editar</a>
+    <a href="{% url 'lostfound:list' %}" class="btn btn-secondary">Volver al listado</a>
+</div>
+
+<div id="print-area">
+    <div class="text-center mb-3">
+        <h1 style="color:#58a6ff;">
+            <i class="bi bi-shield-lock-fill"></i> SentinelLog
+        </h1>
+        <div class="mt-2 text-muted only-print" style="font-size:0.9em;">MVC Son Antem</div>
+    </div>
+    <div class="card mx-auto" style="max-width: 700px;">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Detalle de objeto perdido</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group mb-3">
+                <li class="list-group-item"><strong>Descripción:</strong> {{ item.description }}</li>
+                <li class="list-group-item"><strong>Encontrado en:</strong> {{ item.found_at }}</li>
+                <li class="list-group-item"><strong>Fecha:</strong> {{ item.found_on|date:"d/m/Y H:i" }}</li>
+                <li class="list-group-item"><strong>Encontrado por:</strong> {{ item.found_by }}</li>
+                <li class="list-group-item"><strong>Estado:</strong> {{ item.get_status_display }}</li>
+                {% if item.returned_to %}
+                <li class="list-group-item"><strong>Entregado a:</strong> {{ item.returned_to }}</li>
+                {% endif %}
+                {% if item.returned_on %}
+                <li class="list-group-item"><strong>Fecha de entrega:</strong> {{ item.returned_on|date:"d/m/Y H:i" }}</li>
+                {% endif %}
+                {% if item.photo %}
+                <li class="list-group-item">
+                    <strong>Foto:</strong><br>
+                    <img src="{{ item.photo.url }}" alt="Foto objeto" style="max-width:300px;">
+                </li>
+                {% endif %}
+            </ul>
+
+            <h5>Notas</h5>
+            <ul class="list-group mb-3">
+                {% for note in notes %}
+                <li class="list-group-item">
+                    <strong>{{ note.created_by }}:</strong>
+                    {{ note.note }}<br>
+                    <small class="text-muted">{{ note.created_at|date:"d/m/Y H:i" }}</small>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-muted">No hay notas aún.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Formulario solo visible en pantalla -->
+<form method="post" class="mb-3 no-print">
+    {% csrf_token %}
+    {{ note_form.as_p }}
+    <button type="submit" class="btn btn-primary w-100">Añadir nota</button>
+</form>
+{% endblock %}

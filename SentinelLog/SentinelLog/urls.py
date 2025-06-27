@@ -37,4 +37,6 @@ urlpatterns = [
     path('incident_management/', include('incident_management.urls')),
     path('daily_reports/', include('daily_reports.urls')),
     path('investigations/', include('investigations.urls')),
+    path('lostfound/', include('lostfound.urls', namespace='lostfound')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
