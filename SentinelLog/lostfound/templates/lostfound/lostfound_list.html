@@ -39,13 +39,14 @@
 <a href="{% url 'lostfound:add' %}" class="btn btn-primary mb-3 no-print">Registrar nuevo objeto</a>
 
 <form method="get" class="row g-2 align-items-end mb-3 no-print">
-    <div class="col-md-3">
+    <div class="col-md-2">
         <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Buscar descripción...">
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <input type="text" name="found_by" value="{{ request.GET.found_by }}" class="form-control" placeholder="Encontrado por...">
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
+        <label for="date_from" class="form-label mb-0 small">Estado</label>
         <select name="status" class="form-select">
             <option value="">Todos los estados</option>
             {% for key, value in items.model.STATUS_CHOICES %}
@@ -54,11 +55,17 @@
         </select>
     </div>
     <div class="col-md-2">
-        <button type="submit" class="btn btn-secondary w-100">Filtrar</button>
+        <label for="date_from" class="form-label mb-0 small">Desde</label>
+        <input type="date" id="date_from" name="date_from" value="{{ request.GET.date_from }}" class="form-control">
     </div>
-    <div class="col-md-1 text-end">
-        <button type="button" class="btn btn-outline-primary w-100" onclick="window.print()">🖨️</button>
-        <a href="{% url 'lostfound:list' %}" class="btn btn-outline-secondary w-100">Limpiar</a>
+    <div class="col-md-2">
+        <label for="date_to" class="form-label mb-0 small">Hasta</label>
+        <input type="date" id="date_to" name="date_to" value="{{ request.GET.date_to }}" class="form-control">
+    </div>
+    <div class="col-md-2 d-flex gap-1">
+        <button type="submit" class="btn btn-secondary flex-fill">Filtrar</button>
+        <a href="{% url 'lostfound:list' %}" class="btn btn-outline-secondary flex-fill">Limpiar</a>
+        <button type="button" class="btn btn-outline-primary flex-fill" onclick="window.print()">🖨️</button>
     </div>
 </form>
 

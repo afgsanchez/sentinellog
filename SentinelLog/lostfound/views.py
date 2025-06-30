@@ -15,12 +15,18 @@ class LostFoundListView(ListView):
         q = self.request.GET.get('q')
         found_by = self.request.GET.get('found_by')
         status = self.request.GET.get('status')
+        date_from = self.request.GET.get('date_from')
+        date_to = self.request.GET.get('date_to')
         if q:
             qs = qs.filter(description__icontains=q)
         if found_by:
             qs = qs.filter(found_by__icontains=found_by)
         if status:
             qs = qs.filter(status=status)
+        if date_from:
+            qs = qs.filter(found_on__date__gte=date_from)
+        if date_to:
+            qs = qs.filter(found_on__date__lte=date_to)
         return qs
 
 class LostFoundDetailView(DetailView):
