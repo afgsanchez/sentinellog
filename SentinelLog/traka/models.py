@@ -39,6 +39,8 @@ class TrakaKeyUser(models.Model):
     solicitud_pdf = models.FileField("Solicitud firmada (PDF)", upload_to="traka/solicitudes/", blank=True, null=True)
     fecha_asignacion = models.DateField("Fecha de asignación", auto_now_add=True)
     activo = models.BooleanField("Ocupada", default=True)  # True=ocupada, False=libre
+    fecha_desasignacion = models.DateField("Fecha de desasignación", blank=True, null=True)
+
 
     class Meta:
         unique_together = ("sistema", "posicion")
@@ -49,3 +51,13 @@ class TrakaKeyUser(models.Model):
 
     def esta_libre(self):
         return not self.activo
+    
+class TrakaKeyUserHistory(models.Model):
+    sistema = models.CharField(max_length=30)
+    posicion = models.PositiveIntegerField()
+    nombre_anterior = models.CharField(max_length=100)
+    nombre_nuevo = models.CharField(max_length=100)
+    fecha_cambio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sistema} #{self.posicion}: {self.nombre_anterior} → {self.nombre_nuevo} ({self.fecha_cambio.date()})"
