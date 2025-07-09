@@ -1,0 +1,12 @@
+COMANDOS UTILES DOS
+
+- COPIAR ESTRUCTURA DE DIRECTORIOS SIN COPIAR ARCHIVOS
+
+robocopy "A:Source folder" "B:Destination folder" /e /xf *
+
+- CREAR MULTIPLES CARPETAS SEGUN LISTADO "nombres.txt" EN EL CUAL HAY UN NOMBRE POR LINEA.
+	Hay que crear en la misma carpeta el listado "nombres.txt" y un archivo.bat con el siguiente código:
+@echo off
+for /f "delims=" %%i in (folderlist.txt) do (
+   md "%%i"
+)

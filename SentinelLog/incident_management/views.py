@@ -122,6 +122,7 @@ def generate_incident_pdf(request, pk):
 
     class CyberReportPDF(FPDF):
         def header(self):
+            # Si quieres probar sin logo, comenta la siguiente línea
             logo_path = os.path.join(os.path.dirname(__file__), 'static', 'SentinelLog_logo.png')
             self.image(logo_path, 10, 8, 33)
             self.set_font('DejaVu', 'B', 16)
@@ -160,28 +161,11 @@ def generate_incident_pdf(request, pk):
     pdf = CyberReportPDF()
 
     font_dir = os.path.join(os.path.dirname(__file__), 'static', 'fonts')
-    required_fonts = [
-        'DejaVuSans.ttf',
-        'DejaVuSans-Bold.ttf',
-        'DejaVuSans-Oblique.ttf',
-        'DejaVuSans-BoldOblique.ttf'
-    ]
-    for font in required_fonts:
-        font_path = os.path.join(font_dir, font)
-        if not os.path.exists(font_path):
-            raise FileNotFoundError(f"Fuente no encontrada: {font_path}")
-
     pdf.add_font('DejaVu', '', os.path.join(font_dir, 'DejaVuSans.ttf'), uni=True)
     pdf.add_font('DejaVu', 'B', os.path.join(font_dir, 'DejaVuSans-Bold.ttf'), uni=True)
     pdf.add_font('DejaVu', 'I', os.path.join(font_dir, 'DejaVuSans-Oblique.ttf'), uni=True)
     pdf.add_font('DejaVu', 'BI', os.path.join(font_dir, 'DejaVuSans-BoldOblique.ttf'), uni=True)
 
-    # font_dir = os.path.join(os.path.dirname(__file__), 'static', 'fonts')
-    # pdf.add_font('DejaVu', '', os.path.join(font_dir, 'DejaVuSans.ttf'), uni=True)
-    # pdf.add_font('DejaVu', 'B', os.path.join(font_dir, 'DejaVuSans-Bold.ttf'), uni=True)
-    # pdf.add_font('DejaVu', 'I', os.path.join(font_dir, 'DejaVuSans-Oblique.ttf'), uni=True)
-    # pdf.add_font('DejaVu', 'BI', os.path.join(font_dir, 'DejaVuSans-BoldOblique.ttf'), uni=True)
-    # pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
 
     # Portada
@@ -189,7 +173,6 @@ def generate_incident_pdf(request, pk):
     pdf.set_text_color(0, 51, 102)
     pdf.cell(0, 60, '', ln=True)  # Espacio
     pdf.cell(0, 10, f"Incident Report:", ln=True, align='C')
-    #pdf.cell(0, 15, f"{incident.incident_type.name if incident.incident_type else ''}", ln=True, align='C')
     pdf.set_font("DejaVu", '', 14)
     pdf.set_text_color(0, 0, 0)
     pdf.cell(0, 10, f"Persona afectada: {incident.affected_person or '-'}", ln=True, align='C')
@@ -257,16 +240,23 @@ def generate_incident_pdf(request, pk):
         pdf.set_font("DejaVu", 'I', 11)
         pdf.cell(0, 8, "No hay fotos adjuntas.", ln=True)
 
-    # --- USAR BytesIO PARA DEVOLVER EL PDF ---
-    # from io import BytesIO
-    # pdf_buffer = BytesIO()
-    # pdf.output(pdf_buffer)
-    # pdf_buffer.seek(0)
-
-    # response = HttpResponse(pdf_buffer, content_type='application/pdf')
-    pdf_bytes = pdf.output(dest='S').encode('latin1')  # 'S' devuelve el PDF como string (bytes)
+    pdf_bytes = pdf.output(dest='S')
+    if isinstance(pdf_bytes, bytearray):
+        pdf_bytes = bytes(pdf_bytes)
     response = HttpResponse(pdf_bytes, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename=incidente_{incident.pk}_reporte.pdf'
-
-    # response['Content-Disposition'] = f'attachment; filename=incidente_{incident.pk}_reporte.pdf'
+    response['Content-Disposition'] = f'inline; filename=incidente_{incident.pk}_reporte.pdf'
     return response
+    
+
+# def test_pdf(request):
+#     from fpdf import FPDF
+#     pdf = FPDF()
+#     pdf.add_page()
+#     pdf.set_font("Arial", size=12)
+#     pdf.cell(200, 10, txt="¡Hola, PDF!", ln=True, align='C')
+#     pdf_bytes = pdf.output(dest='S')
+#     if isinstance(pdf_bytes, str):
+#         pdf_bytes = pdf_bytes.encode('latin1')
+#     elif isinstance(pdf_bytes, bytearray):
+#         pdf_bytes = bytes(pdf_bytes)
+#     return HttpResponse(pdf_bytes, content_type='application/pdf')

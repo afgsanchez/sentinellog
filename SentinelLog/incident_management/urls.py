@@ -7,4 +7,5 @@ urlpatterns = [
     path('edit/<int:pk>/', views.edit_incident, name='edit_incident'),
     path('detail/<int:pk>/', views.incident_detail, name='incident_detail'),
     path('pdf/<int:pk>/', views.generate_incident_pdf, name='generate_incident_pdf'),
+    # path('test_pdf/', views.test_pdf, name='test_pdf'),
 ]
