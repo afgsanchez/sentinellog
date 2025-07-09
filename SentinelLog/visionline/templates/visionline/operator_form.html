@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card mx-auto mt-4" style="max-width: 1200px;">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">
+            {% if is_edit %}✏️ Editar operador{% else %}➕ Nuevo operador{% endif %}
+        </h4>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" autocomplete="off">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100 mt-2">
+                {% if is_edit %}Guardar cambios{% else %}Crear operador{% endif %}
+            </button>
+        </form>
+        <a href="{% url 'visionline_operator_list' %}" class="btn btn-link mt-3">
+            ⬅ Volver al listado de operadores
+        </a>
+    </div>
+</div>
+{% endblock %}

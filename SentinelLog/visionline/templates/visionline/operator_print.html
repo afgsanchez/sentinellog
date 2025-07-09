@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Listado de Operadores Visionline</h2>
+    <button class="btn btn-secondary mb-3" onclick="window.print()">Imprimir</button>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>EID</th>
+                    <th>Departamento</th>
+                    <th>Cargo</th>
+                    <th>Acceso</th>
+                    <th>Usuario</th>
+                    <th>Activo</th>
+                    <th>Fecha solicitud</th>
+                    <th>Alta por</th>
+                    <th>Fecha alta</th>
+                    <th>Manager</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for op in operators %}
+                <tr>
+                    <td>{{ op.full_name }}</td>
+                    <td>{{ op.eid }}</td>
+                    <td>{{ op.department }}</td>
+                    <td>{{ op.position }}</td>
+                    <td>{{ op.get_access_required_display }}</td>
+                    <td>{{ op.username_assigned }}</td>
+                    <td>{% if op.is_active %}Sí{% else %}No{% endif %}</td>
+                    <td>{{ op.request_date }}</td>
+                    <td>{{ op.setup_by }}</td>
+                    <td>{{ op.completion_date }}</td>
+                    <td>{{ op.manager_signed }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center text-muted">No hay operadores registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<style>
+@media print {
+    .btn, nav, .navbar, .sidebar { display: none !important; }
+    body { background: #fff !important; }
+}
+</style>
+
+{% endblock %}

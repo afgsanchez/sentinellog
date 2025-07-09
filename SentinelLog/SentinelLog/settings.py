@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'investigations',
     'daily_reports',
     'lostfound',
+    'visionline',
 
 ]
 
