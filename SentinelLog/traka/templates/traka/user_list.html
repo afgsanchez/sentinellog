@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Listado de usuarios Traka</h2>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <input type="text" name="nombre" class="form-control" placeholder="Nombre" value="{{ request.GET.nombre }}">
+        </div>
+        <div class="col-md-2">
+            <select name="sistema" class="form-select">
+                <option value="">Sistema</option>
+                {% for key, label in users.model.SISTEMA_CHOICES %}
+                    <option value="{{ key }}" {% if request.GET.sistema == key %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="departamento" class="form-select">
+                <option value="">Departamento</option>
+                {% for key, label in users.model.DEPARTAMENTO_CHOICES %}
+                    <option value="{{ key }}" {% if request.GET.departamento == key %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="tipo_llave" class="form-select">
+                <option value="">Tipo de llave</option>
+                {% for key, label in users.model.TIPO_LLAVE_CHOICES %}
+                    <option value="{{ key }}" {% if request.GET.tipo_llave == key %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="activo" class="form-select">
+                <option value="">Estado</option>
+                <option value="true" {% if request.GET.activo == "true" %}selected{% endif %}>Ocupada</option>
+                <option value="false" {% if request.GET.activo == "false" %}selected{% endif %}>Libre</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Departamento</th>
+                <th>Sistema</th>
+                <th>Posición</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.nombre }}</td>
+                <td>{{ user.departamento }}</td>
+                <td>{{ user.sistema }}</td>
+                <td>{{ user.posicion }}</td>
+                <td>{{ user.tipo_llave }}</td>
+                <td>
+                    {% if user.activo %}
+                        <span class="badge bg-success">Ocupada</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Libre</span>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'traka:user_detail' user.pk %}" class="btn btn-sm btn-outline-primary">Ver</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No se encontraron resultados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'traka:user_create' %}" class="btn btn-success">+ Nuevo usuario</a>
+</div>
+{% endblock %}

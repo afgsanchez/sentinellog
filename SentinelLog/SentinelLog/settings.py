@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'daily_reports',
     'lostfound',
     'visionline',
+    'traka',
 
 ]
 

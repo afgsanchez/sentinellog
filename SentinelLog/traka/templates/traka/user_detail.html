@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Ficha de usuario</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">{{ user.nombre }}</dd>
+
+        <dt class="col-sm-3">Cargo</dt>
+        <dd class="col-sm-9">{{ user.cargo }}</dd>
+
+        <dt class="col-sm-3">Departamento</dt>
+        <dd class="col-sm-9">{{ user.departamento }}</dd>
+
+        <dt class="col-sm-3">Sistema</dt>
+        <dd class="col-sm-9">{{ user.sistema }}</dd>
+
+        <dt class="col-sm-3">Tipo de llave</dt>
+        <dd class="col-sm-9">{{ user.tipo_llave }}</dd>
+
+        <dt class="col-sm-3">Posición</dt>
+        <dd class="col-sm-9">{{ user.posicion }}</dd>
+
+        <dt class="col-sm-3">Acceso anterior</dt>
+        <dd class="col-sm-9">{{ user.acceso_anterior|linebreaks }}</dd>
+
+        <dt class="col-sm-3">Fecha de asignación</dt>
+        <dd class="col-sm-9">{{ user.fecha_asignacion }}</dd>
+
+        <dt class="col-sm-3">Estado</dt>
+        <dd class="col-sm-9">
+            {% if user.activo %}
+                <span class="badge bg-success">Ocupada</span>
+            {% else %}
+                <span class="badge bg-secondary">Libre</span>
+            {% endif %}
+        </dd>
+
+        {% if user.solicitud_pdf %}
+        <dt class="col-sm-3">Solicitud PDF</dt>
+        <dd class="col-sm-9">
+            <a href="{{ user.solicitud_pdf.url }}" target="_blank">Ver PDF</a>
+        </dd>
+        {% endif %}
+    </dl>
+
+    <a href="{% url 'traka:user_update' user.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'traka:user_list' %}" class="btn btn-secondary">Volver</a>
+</div>
+{% endblock %}
