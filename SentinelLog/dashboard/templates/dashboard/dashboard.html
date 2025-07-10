@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">📊 Panel de Actividad Reciente</h2>
+
+    <!-- <div class="row mb-4">
+        <div class="col-md-6">
+            <h5>Totales por módulo</h5>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Daily Reports</span><span class="badge bg-primary">{{ total_daily_reports }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Incidentes</span><span class="badge bg-primary">{{ total_incidentes }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Investigaciones</span><span class="badge bg-primary">{{ total_investigaciones }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Lost & Found</span><span class="badge bg-primary">{{ total_objetos_perdidos }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Traka</span><span class="badge bg-primary">{{ total_traka }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Visionline</span><span class="badge bg-primary">{{ total_visionline }}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <h5>Gráfico de actividad</h5>
+            <canvas id="activityChart" height="250"></canvas>
+        </div>
+    </div> -->
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% include "dashboard/_card.html" with titulo="Daily Reports" items=ultimos_daily_reports %}
+        {% include "dashboard/_card.html" with titulo="Incidentes" items=ultimos_incidentes %}
+        {% include "dashboard/_card.html" with titulo="Investigaciones" items=ultimas_investigaciones %}
+        {% include "dashboard/_card.html" with titulo="Lost & Found" items=ultimos_objetos_perdidos %}
+        {% include "dashboard/_card.html" with titulo="Traka" items=ultimos_traka %}
+        {% include "dashboard/_card.html" with titulo="Visionline" items=ultimos_visionline %}
+    </div>
+</div>
+
+<h3 class="mt-5">🗂️ Grupos Traka</h3>
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Tipo Tarjeta</th>
+            <th>Localización</th>
+            <th>Fecha de Caducidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grupo in grupos_traka %}
+        <tr
+            {% if grupo.fecha_caducidad < today %}
+                class="table-danger"
+            {% elif grupo.fecha_caducidad <= today_plus_2 %}
+                class="table-warning"
+            {% endif %}
+        >
+            <td>{{ grupo.tipo_tarjeta }}</td>
+            <td>{{ grupo.localizacion_tarjeta }}</td>
+            <td>{{ grupo.fecha_caducidad }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No hay grupos registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    const activityChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Daily Reports', 'Incidentes', 'Investigaciones', 'Lost & Found', 'Traka', 'Visionline'],
+            datasets: [{
+                label: 'Total de cambios',
+                data: [
+                    {{ total_daily_reports }},
+                    {{ total_incidentes }},
+                    {{ total_investigaciones }},
+                    {{ total_objetos_perdidos }},
+                    {{ total_traka }},
+                    {{ total_visionline }}
+                ],
+                backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                borderColor: 'rgba(13, 110, 253, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

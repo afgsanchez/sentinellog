@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from simple_history.models import HistoricalRecords
+
 
 class InvestigationCase(models.Model):
     title = models.CharField(max_length=200)
@@ -9,6 +11,7 @@ class InvestigationCase(models.Model):
     is_closed = models.BooleanField(default=False)
     conclusiones = models.TextField(blank=True, null=True)
     pdf_last_saved = models.DateTimeField(blank=True, null=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.title

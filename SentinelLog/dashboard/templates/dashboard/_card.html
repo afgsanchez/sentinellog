@@ -1,0 +1,33 @@
+<div class="col">
+    <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
+            <strong>{{ titulo }}</strong>
+        </div>
+        <div class="card-body">
+            {% if items %}
+                <ul class="list-group list-group-flush">
+                    {% for item in items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted">{{ item.history_date|date:"Y-m-d H:i" }}</small><br>
+                            {{ item }}
+                        </div>
+                        <span class="badge 
+                            {% if item.history_type == '+' %}bg-success
+                            {% elif item.history_type == '~' %}bg-warning text-dark
+                            {% else %}bg-danger
+                            {% endif %}">
+                            {% if item.history_type == '+' %}Creado
+                            {% elif item.history_type == '~' %}Modificado
+                            {% else %}Eliminado
+                            {% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No hay movimientos recientes.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from simple_history.models import HistoricalRecords
+
 
 class LostFoundItem(models.Model):
     STATUS_CHOICES = [
@@ -20,6 +22,7 @@ class LostFoundItem(models.Model):
     returned_to = models.CharField(max_length=255, blank=True)
     returned_on = models.DateTimeField(blank=True, null=True)
     notes = models.TextField(blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.description} ({self.get_status_display()})"

@@ -5,6 +5,7 @@ from .models import (
     InvestigationComment,
     InterviewRecord
 )
+from simple_history.admin import SimpleHistoryAdmin
 
 class InvestigationDocumentInline(admin.TabularInline):
     model = InvestigationDocument
@@ -19,7 +20,7 @@ class InterviewRecordInline(admin.TabularInline):
     extra = 1
 
 @admin.register(InvestigationCase)
-class InvestigationCaseAdmin(admin.ModelAdmin):
+class InvestigationCaseAdmin(SimpleHistoryAdmin):
     list_display = ('title', 'created_by', 'created_at', 'is_closed', 'has_documents')
 
     inlines = [InvestigationDocumentInline, InvestigationCommentInline, InterviewRecordInline]

@@ -1,4 +1,6 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
+
 
 class VisionlineOperator(models.Model):
     # Sección 1
@@ -32,6 +34,7 @@ class VisionlineOperator(models.Model):
     request_pdf = models.FileField("Solicitud firmada (PDF)", upload_to="visionline/requests/")
 
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.full_name} ({self.username_assigned})"

@@ -1,4 +1,6 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
+
 
 class TrakaKeyUser(models.Model):
     DEPARTAMENTO_CHOICES = [
@@ -58,6 +60,7 @@ class TrakaKeyUserHistory(models.Model):
     nombre_anterior = models.CharField(max_length=100)
     nombre_nuevo = models.CharField(max_length=100)
     fecha_cambio = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.sistema} #{self.posicion}: {self.nombre_anterior} → {self.nombre_nuevo} ({self.fecha_cambio.date()})"

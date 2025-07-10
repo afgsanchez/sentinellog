@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import TrakaKeyUser, TrakaKeyUserHistory
+from simple_history.admin import SimpleHistoryAdmin
 
 @admin.register(TrakaKeyUser)
 class TrakaKeyUserAdmin(admin.ModelAdmin):
@@ -8,7 +9,7 @@ class TrakaKeyUserAdmin(admin.ModelAdmin):
     search_fields = ("nombre", "cargo")
 
 @admin.register(TrakaKeyUserHistory)
-class TrakaKeyUserHistoryAdmin(admin.ModelAdmin):
+class TrakaKeyUserHistoryAdmin(SimpleHistoryAdmin):
     list_display = ("sistema", "posicion", "nombre_anterior", "nombre_nuevo", "fecha_cambio")
     list_filter = ("sistema", "fecha_cambio")
     search_fields = ("nombre_anterior", "nombre_nuevo")

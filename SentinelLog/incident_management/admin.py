@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from simple_history.admin import SimpleHistoryAdmin
 
 class IncidentPhotoInline(admin.TabularInline):
     model = IncidentPhoto
@@ -14,7 +15,7 @@ class IncidentAttachmentInline(admin.TabularInline):
     extra = 1
 
 @admin.register(Incident)
-class IncidentAdmin(admin.ModelAdmin):
+class IncidentAdmin(SimpleHistoryAdmin):
     list_display = ('incident_type', 'date', 'location', 'reported_by', 'insurance_case_number', 'related_investigation')
     list_filter = ('incident_type', 'date', 'reported_by')
     search_fields = ('description', 'location', 'insurance_case_number')

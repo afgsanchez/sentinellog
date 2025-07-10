@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from simple_history.models import HistoricalRecords
+
 
 class DailyReport(models.Model):
     REPORT_TYPE_CHOICES = [
@@ -26,6 +28,7 @@ class DailyReport(models.Model):
     )
     notes = models.TextField(blank=True, help_text="Notas u observaciones adicionales")
     pdf_text = models.TextField(blank=True, help_text="Texto extraído del PDF para búsqueda")
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.get_report_type_display()} - {self.date} ({self.pdf_file.name.split('/')[-1]})"
