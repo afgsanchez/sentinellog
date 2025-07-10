@@ -11,7 +11,8 @@ class LostFoundItem(models.Model):
         ('returned', 'Devuelto al propietario'),
         ('discarded', 'Descartado'),
         ('returned_to_associate', 'Entregado al asociado que encontró el objeto'),
-        ('dissapeared', 'Desaparecido'),
+        ('returned_to_other', 'Entregado a persona distinta del hallador o propietario'),
+        ('dissapeared', 'Desaparecido/Perdido'),
     ]
     description = models.CharField(max_length=255)
     found_at = models.CharField(max_length=255)
