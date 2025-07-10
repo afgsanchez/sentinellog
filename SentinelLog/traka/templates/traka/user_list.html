@@ -3,10 +3,10 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Listado de usuarios Traka</h2>
-
-    <form method="get" class="row g-3 mb-4">
-        <div class="col-md-3">
+    <h2>Listado de posiciones Traka</h2>
+    
+    <form method="get" class="row g-2 mb-3 align-items-end">
+        <div class="col-md-2">
             <input type="text" name="nombre" class="form-control" placeholder="Nombre" value="{{ request.GET.nombre }}">
         </div>
         <div class="col-md-2">
@@ -33,17 +33,22 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <select name="activo" class="form-select">
                 <option value="">Estado</option>
                 <option value="true" {% if request.GET.activo == "true" %}selected{% endif %}>Ocupada</option>
                 <option value="false" {% if request.GET.activo == "false" %}selected{% endif %}>Libre</option>
             </select>
         </div>
-        <div class="col-md-1">
-            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        <div class="col-md-3 d-flex gap-2 justify-content-end">
+            <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+            <a href="{% url 'traka:checklist_pdf' %}" target="_blank" class="btn btn-outline-secondary btn-sm d-flex align-items-center">📋 Auditoría</a>
+            <a href="{% url 'traka:user_create' %}" class="btn btn-success btn-sm d-flex align-items-center">Nuevo usuario</a>
         </div>
     </form>
+
+
+
 
     <table class="table table-striped">
         <thead>

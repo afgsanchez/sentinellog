@@ -52,7 +52,7 @@ class Command(BaseCommand):
             posicion = row.get("Pos.")
             acceso_anterior = str(row.get("Acceso Anterior", "")).strip()
 
-            if not nombre or pd.isna(posicion):
+            if pd.isna(posicion):
                 continue
 
             try:
@@ -60,21 +60,37 @@ class Command(BaseCommand):
             except ValueError:
                 continue
 
+            # Si el nombre está vacío o es 'nan', marcar como libre
+            if not nombre or nombre.lower() == "nan":
+                TrakaKeyUser.objects.update_or_create(
+                    sistema=sistema,
+                    posicion=posicion,
+                    defaults={
+                        "nombre": "",
+                        "cargo": cargo,
+                        "departamento": departamento,
+                        "tipo_llave": tipo_llave,
+                        "acceso_anterior": acceso_anterior,
+                        "activo": False,
+                        "fecha_desasignacion": None,
+                    }
+                )
+                total += 1
+                self.stdout.write(f"Libre: {sistema} #{posicion}")
+                continue
+
             try:
                 existente = TrakaKeyUser.objects.get(sistema=sistema, posicion=posicion)
                 if existente.nombre != nombre:
-                    # Registrar historial
                     TrakaKeyUserHistory.objects.create(
                         sistema=sistema,
                         posicion=posicion,
                         nombre_anterior=existente.nombre,
                         nombre_nuevo=nombre
                     )
-                    # Actualizar fecha de desasignación
                     existente.fecha_desasignacion = date.today()
                     existente.save()
 
-                    # Añadir al acceso_anterior
                     if acceso_anterior:
                         acceso_anterior = f"{existente.nombre}, {acceso_anterior}"
                     else:
@@ -82,7 +98,7 @@ class Command(BaseCommand):
             except TrakaKeyUser.DoesNotExist:
                 pass
 
-            obj, created = TrakaKeyUser.objects.update_or_create(
+            TrakaKeyUser.objects.update_or_create(
                 sistema=sistema,
                 posicion=posicion,
                 defaults={
@@ -96,6 +112,6 @@ class Command(BaseCommand):
                 }
             )
             total += 1
-            self.stdout.write(f"{'Creado' if created else 'Actualizado'}: {nombre} - {sistema} #{posicion}")
+            self.stdout.write(f"Asignado: {nombre} - {sistema} #{posicion}")
 
         self.stdout.write(self.style.SUCCESS(f"Importación completada. Total de registros procesados: {total}"))

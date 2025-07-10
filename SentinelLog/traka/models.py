@@ -29,7 +29,7 @@ class TrakaKeyUser(models.Model):
         ("Individual", "Individual"),
     ]
 
-    nombre = models.CharField("Nombre", max_length=100)
+    nombre = models.CharField("Nombre", max_length=100, blank=True)
     cargo = models.CharField("Cargo o posición", max_length=100)
     departamento = models.CharField("Departamento", max_length=30, choices=DEPARTAMENTO_CHOICES)
     sistema = models.CharField("Sistema", max_length=30, choices=SISTEMA_CHOICES)

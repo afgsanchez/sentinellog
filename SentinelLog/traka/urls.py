@@ -8,4 +8,6 @@ urlpatterns = [
     path("nuevo/", views.TrakaKeyUserCreateView.as_view(), name="user_create"),
     path("<int:pk>/", views.TrakaKeyUserDetailView.as_view(), name="user_detail"),
     path("<int:pk>/editar/", views.TrakaKeyUserUpdateView.as_view(), name="user_update"),
+    path("auditoria/pdf/", views.generar_checklist_pdf, name="checklist_pdf"),
+
 ]
