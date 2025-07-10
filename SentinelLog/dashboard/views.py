@@ -11,13 +11,13 @@ from datetime import date, timedelta
 
 def dashboard_view(request):
     context = {
-        # Últimos 5 movimientos por modelo
-        'ultimos_daily_reports': DailyReport.history.all().order_by('-history_date')[:5],
-        'ultimos_incidentes': Incident.history.all().order_by('-history_date')[:5],
-        'ultimas_investigaciones': InvestigationCase.history.all().order_by('-history_date')[:5],
-        'ultimos_objetos_perdidos': LostFoundItem.history.all().order_by('-history_date')[:5],
-        'ultimos_traka': TrakaKeyUserHistory.history.all().order_by('-history_date')[:5],
-        'ultimos_visionline': VisionlineOperator.history.all().order_by('-history_date')[:5],
+        # Últimos 3 movimientos por modelo
+        'ultimos_daily_reports': DailyReport.history.all().order_by('-history_date')[:3],
+        'ultimos_incidentes': Incident.history.all().order_by('-history_date')[:3],
+        'ultimas_investigaciones': InvestigationCase.history.all().order_by('-history_date')[:3],
+        'ultimos_objetos_perdidos': LostFoundItem.history.all().order_by('-history_date')[:3],
+        'ultimos_traka': TrakaKeyUserHistory.history.all().order_by('-history_date')[:3],
+        'ultimos_visionline': VisionlineOperator.history.all().order_by('-history_date')[:3],
 
         # Totales por modelo
         'total_daily_reports': DailyReport.history.count(),
