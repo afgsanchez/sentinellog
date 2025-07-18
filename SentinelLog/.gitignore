@@ -20,4 +20,5 @@ venv/
 *.log
 
 # Archivos de media subidos por usuarios (opcional, si no quieres subirlos)
-# media/
+media/
+reports/

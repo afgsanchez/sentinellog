@@ -36,7 +36,7 @@
             text-decoration: none;
         }
         nav a:hover {
-           a6ff;
+           color: #a6ff00;
         }
         main {
             padding: 2rem;
@@ -62,7 +62,7 @@
             <a href="{% url 'traka:user_list' %}">Traka</a>
             <a href="{% url 'visionline_operator_list' %}">VisionLine</a>
             <a href="{% url 'lostfound:list' %}">Lost &amp; Found</a>
-            <a href="/incident_management/">Incidentes</a>
+            <a href="/incident_management/">Incident Reports</a>
             <a href="/daily_reports/">Informes Diarios</a>
             <a href="/investigations/">Investigaciones</a>
             {% if user.is_authenticated %}
@@ -79,7 +79,7 @@
     </main>
 
     <footer>
-        SentinelLog © {{ now|date:"Y" }} - Antonio Gutiérrez Sánchez
+        SentinelLog © {{ now|date:"YYYY" }} v.1.0 - Antonio Gutiérrez Sánchez
     </footer>
 
     {% if messages %}
