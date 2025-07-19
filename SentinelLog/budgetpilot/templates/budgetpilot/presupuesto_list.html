@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
+{% load format_filters %}
+
+
 
 {% block content %}
 <style>
@@ -108,7 +112,7 @@
                 <td>{{ presupuesto.numero }}</td>
                 <td>{{ presupuesto.proveedor.nombre }}</td>
                 <td>{{ presupuesto.fecha }}</td>
-                <td>{{ presupuesto.subtotal }}</td>
+                <td>{{ presupuesto.subtotal|formato_europeo }}</td>
                 <td>{{ presupuesto.get_estado_display }}</td>
                 <td class="no-print">
                     <a href="{% url 'budgetpilot:presupuesto_detail' presupuesto.pk %}" class="btn btn-sm btn-info">Ver</a>
