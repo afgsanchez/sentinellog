@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load format_filters %}
 {% block content %}
 <div class="card mx-auto mt-4" style="max-width: 800px;">
     <div class="card-header bg-info text-white">
@@ -17,7 +17,7 @@
             <dd class="col-sm-8">{{ presupuesto.fecha|date:"d/m/Y" }}</dd>
 
             <dt class="col-sm-4">Subtotal</dt>
-            <dd class="col-sm-8">{{ presupuesto.subtotal }} €</dd>
+            <dd class="col-sm-8">{{ presupuesto.subtotal|formato_europeo }} €</dd>
 
             <dt class="col-sm-4">Estado</dt>
             <dd class="col-sm-8">{{ presupuesto.get_estado_display }}</dd>
