@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    #print-area, #print-area * {
+        visibility: visible !important;
+    }
+    #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        z-index: 9999;
+        padding: 0;
+        margin: 0;
+    }
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+@media screen {
+    .only-print {
+        display: none !important;
+    }
+}
+@media print {
+    .only-print {
+        display: block !important;
+    }
+}
+</style>
+
+<a href="{% url 'budgetpilot:presupuesto_create' %}" class="btn btn-primary mb-3 no-print">Nuevo presupuesto</a>
+
+<form method="get" class="row g-2 align-items-end mb-3 no-print">
+    <div class="col-md-3">
+        <label class="form-label mb-0 small">Proveedor</label>
+        <select name="proveedor" class="form-select">
+            <option value="">Todos los proveedores</option>
+            {% for proveedor in filter.form.proveedor.field.queryset %}
+                <option value="{{ proveedor.pk }}" {% if request.GET.proveedor == proveedor.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ proveedor.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label mb-0 small">Estado</label>
+        <select name="estado" class="form-select">
+            <option value="">Todos los estados</option>
+            {% for key, value in filter.form.estado.field.choices %}
+                {% if key %}
+                <option value="{{ key }}" {% if request.GET.estado == key %}selected{% endif %}>{{ value }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label mb-0 small">Desde</label>
+        <input type="date" name="fecha_after" value="{{ request.GET.fecha_after }}" class="form-control">
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label mb-0 small">Hasta</label>
+        <input type="date" name="fecha_before" value="{{ request.GET.fecha_before }}" class="form-control">
+    </div>
+
+    <div class="col-md-3 d-flex gap-1">
+        <button type="submit" class="btn btn-secondary flex-fill">Filtrar</button>
+        <a href="{% url 'budgetpilot:presupuesto_list' %}" class="btn btn-outline-secondary flex-fill">Limpiar</a>
+        <button type="button" class="btn btn-outline-primary flex-fill" onclick="window.print()">🖨️</button>
+    </div>
+</form>
+
+
+<div id="print-area">
+    <div class="text-center mb-3">
+        <h1 style="color:#58a6ff;">
+            <i class="text-muted only-print bi bi-shield-lock-fill"> SentinelLog </i>
+        </h1>
+        <div class="mt-2 text-muted only-print" style="font-size:0.9em;">MVC Son Antem</div>
+    </div>
+
+    <h2 class="mb-3">Presupuestos</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Proveedor</th>
+                <th>Fecha</th>
+                <th>Subtotal (€)</th>
+                <th>Estado</th>
+                <th class="no-print"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for presupuesto in page_obj %}
+
+            <tr>
+                <td>{{ presupuesto.numero }}</td>
+                <td>{{ presupuesto.proveedor.nombre }}</td>
+                <td>{{ presupuesto.fecha }}</td>
+                <td>{{ presupuesto.subtotal }}</td>
+                <td>{{ presupuesto.get_estado_display }}</td>
+                <td class="no-print">
+                    <a href="{% url 'budgetpilot:presupuesto_detail' presupuesto.pk %}" class="btn btn-sm btn-info">Ver</a>
+                    <a href="{% url 'budgetpilot:presupuesto_edit' presupuesto.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No hay presupuestos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Paginación">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if num <= 2 or num > page_obj.paginator.num_pages|add:'-2' or num >= page_obj.number|add:'-1' and num <= page_obj.number|add:'1' %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+            {% elif num == 3 or num == page_obj.paginator.num_pages|add:'-2' %}
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+        </nav>
+
+
+    {% if alertas %}
+    <div class="card mt-4 border-danger">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">⚠️ Presupuestos con alertas</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered mb-0">
+            <thead class="table-light">
+                <tr>
+                <th>Número</th>
+                <th>Proveedor</th>
+                <th>Estado</th>
+                <th>Días en estado</th>
+                <th>Entrega estimada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in alertas %}
+                <tr>
+                <td>{{ p.numero }}</td>
+                <td>{{ p.proveedor.nombre }}</td>
+                <td><span class="badge bg-warning text-dark">{{ p.get_estado_display }}</span></td>
+                <td>
+                    {% if p.dias_en_estado is not None %}
+                    {{ p.dias_en_estado }} días
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+                <td>
+                    {% if p.fecha_entrega_estimada and p.fecha_entrega_estimada < today %}
+                    <span class="text-danger">{{ p.fecha_entrega_estimada|date:"d/m/Y" }}</span>
+                    {% else %}
+                    {{ p.fecha_entrega_estimada|date:"d/m/Y" }}
+                    {% endif %}
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+
+
+{% endblock %}

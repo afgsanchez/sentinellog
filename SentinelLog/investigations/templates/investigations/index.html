@@ -9,7 +9,7 @@
 </div>
 
 <div class="list-group">
-    {% for case in cases %}
+    {% for case in page_obj %}
         <a href="{% url 'case_detail' case.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-dark text-light">
             <span>
                 <i class="bi bi-folder2-open"></i> {{ case.title }}
@@ -33,5 +33,36 @@
             No hay casos registrados.
         </div>
     {% endfor %}
+
+    <br>
+    <!-- Paginación -->
+    <nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">&laquo;</a>
+        </li>
+        {% endif %}
+
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if num <= 2 or num > page_obj.paginator.num_pages|add:'-2' or num >= page_obj.number|add:'-1' and num <= page_obj.number|add:'1' %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+            {% elif num == 3 or num == page_obj.paginator.num_pages|add:'-2' %}
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+            {% endif %}
+            {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">&raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+    </nav>
+
+
 </div>
 {% endblock %}

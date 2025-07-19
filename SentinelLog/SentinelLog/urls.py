@@ -40,6 +40,7 @@ urlpatterns = [
     path('lostfound/', include('lostfound.urls', namespace='lostfound')),
     path('visionline/', include('visionline.urls')),
     path("traka/", include("traka.urls")),
+    path('budgetpilot/', include('budgetpilot.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

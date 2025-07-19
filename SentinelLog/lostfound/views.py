@@ -9,6 +9,7 @@ class LostFoundListView(ListView):
     template_name = 'lostfound/lostfound_list.html'
     context_object_name = 'items'
     ordering = ['-found_on']
+    paginate_by = 10  # Mostrar 10 elementos por página
 
     def get_queryset(self):
         qs = super().get_queryset()

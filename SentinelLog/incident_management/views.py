@@ -9,6 +9,7 @@ from django.utils import timezone
 from fpdf import FPDF
 import os
 from io import BytesIO
+from django.core.paginator import Paginator
 
 
 def extract_docx_text(docx_file):
@@ -29,8 +30,16 @@ def index(request):
             Q(insurance_case_number__icontains=search) |
             Q(docx_text__icontains=search)
         )
+
+    
+    paginator = Paginator(incidents, 10)  # 5 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    
     return render(request, 'incident_management/index.html', {
-        'incidents': incidents,
+        #'incidents': incidents,
+        'page_obj': page_obj,
         'search': search,
     })
 
@@ -246,17 +255,3 @@ def generate_incident_pdf(request, pk):
     response = HttpResponse(pdf_bytes, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename=incidente_{incident.pk}_reporte.pdf'
     return response
-    
-
-# def test_pdf(request):
-#     from fpdf import FPDF
-#     pdf = FPDF()
-#     pdf.add_page()
-#     pdf.set_font("Arial", size=12)
-#     pdf.cell(200, 10, txt="¡Hola, PDF!", ln=True, align='C')
-#     pdf_bytes = pdf.output(dest='S')
-#     if isinstance(pdf_bytes, str):
-#         pdf_bytes = pdf_bytes.encode('latin1')
-#     elif isinstance(pdf_bytes, bytearray):
-#         pdf_bytes = bytes(pdf_bytes)
-#     return HttpResponse(pdf_bytes, content_type='application/pdf')

@@ -7,6 +7,7 @@ from fpdf import FPDF
 from django.contrib import messages
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from .models import InvestigationCase, InvestigationDocument, InvestigationComment, InterviewRecord
 from .forms import (
     InvestigationCaseForm,
@@ -17,7 +18,15 @@ from .forms import (
 
 def index(request):
     cases = InvestigationCase.objects.all().order_by('-created_at')
-    return render(request, 'investigations/index.html', {'cases': cases})
+
+    paginator = Paginator(cases, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # return render(request, 'investigations/index.html', {'cases': cases})
+    return render(request, 'investigations/index.html', {'page_obj': page_obj})
+
+
 
 def case_detail(request, case_id):
     case = get_object_or_404(InvestigationCase, id=case_id)

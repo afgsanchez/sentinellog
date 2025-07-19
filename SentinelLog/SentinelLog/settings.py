@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'lostfound',
     'visionline',
     'traka',
+    'budgetpilot',
     'simple_history',
+    'django_filters',
 
 ]
 

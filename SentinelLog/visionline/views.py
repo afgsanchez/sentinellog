@@ -4,15 +4,18 @@ from .models import VisionlineOperator
 from .forms import VisionlineOperatorForm
 from django.http import FileResponse
 from datetime import datetime
+from django.core.paginator import Paginator
 
 def operator_list(request):
     qs = VisionlineOperator.objects.all().order_by('-created_at')
+    
 
     # Filtros
     estado = request.GET.get('estado')
     search = request.GET.get('search')
     date_from = request.GET.get('date_from')
     date_to = request.GET.get('date_to')
+    
 
     if estado in ['activo', 'inactivo']:
         qs = qs.filter(is_active=(estado == 'activo'))
@@ -45,7 +48,13 @@ def operator_list(request):
         "date_from": date_from,
         "date_to": date_to,
     }
-    return render(request, "visionline/operator_list.html", context)
+
+    # Paginación
+    paginator = Paginator(qs, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "visionline/operator_list.html", {'page_obj':page_obj})
 
 def operator_create(request):
     if request.method == "POST":

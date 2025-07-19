@@ -14,6 +14,7 @@ class TrakaKeyUserListView(ListView):
     model = TrakaKeyUser
     template_name = "traka/user_list.html"
     context_object_name = "users"
+    paginate_by = 10  # Mostrar 10 usuarios por página
 
     def get_queryset(self):
         queryset = super().get_queryset()

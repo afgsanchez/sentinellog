@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card mx-auto mt-4" style="max-width: 800px;">
+    <div class="card-header bg-info text-white">
+        <h4 class="mb-0">Detalle del presupuesto</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">Proveedor</dt>
+            <dd class="col-sm-8">{{ presupuesto.proveedor }}</dd>
+
+            <dt class="col-sm-4">Número</dt>
+            <dd class="col-sm-8">{{ presupuesto.numero }}</dd>
+
+            <dt class="col-sm-4">Fecha</dt>
+            <dd class="col-sm-8">{{ presupuesto.fecha|date:"d/m/Y" }}</dd>
+
+            <dt class="col-sm-4">Subtotal</dt>
+            <dd class="col-sm-8">{{ presupuesto.subtotal }} €</dd>
+
+            <dt class="col-sm-4">Estado</dt>
+            <dd class="col-sm-8">{{ presupuesto.get_estado_display }}</dd>
+
+            <dt class="col-sm-4">Fecha estimada de entrega</dt>
+            <dd class="col-sm-8">{{ presupuesto.fecha_entrega_estimada|date:"d/m/Y" }}</dd>
+
+            <dt class="col-sm-4">Responsable</dt>
+            <dd class="col-sm-8">{{ presupuesto.responsable }}</dd>
+
+            <dt class="col-sm-4">Comentarios</dt>
+            <dd class="col-sm-8">{{ presupuesto.comentarios|linebreaksbr }}</dd>
+
+            <dt class="col-sm-4">Documento</dt>
+            <dd class="col-sm-8">
+                {% if presupuesto.documento %}
+                    <a href="{{ presupuesto.documento.url }}" target="_blank">📄 Ver documento</a>
+                {% else %}
+                    <span class="text-muted">No adjunto</span>
+                {% endif %}
+            </dd>
+        </dl>
+
+        <a href="{% url 'budgetpilot:presupuesto_edit' presupuesto.pk %}" class="btn btn-warning w-100 mt-3">✏️ Editar presupuesto</a>
+        <a href="{% url 'budgetpilot:presupuesto_list' %}" class="btn btn-link mt-2">⬅ Volver al listado</a>
+    </div>
+</div>
+
+{% if historial_simple %}
+<div class="card mx-auto mt-4" style="max-width: 800px;">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Historial completo de cambios</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for entrada in historial_simple %}
+        <li class="list-group-item">
+            <strong>{{ entrada.usuario|default:"Sistema" }}</strong> modificó el presupuesto el {{ entrada.fecha|date:"d/m/Y H:i" }}<br>
+            <small class="text-muted">Tipo de cambio: {{ entrada.tipo }}</small>
+            {% if entrada.cambios %}
+            <ul class="mt-2">
+                {% for cambio in entrada.cambios %}
+                <li>
+                    <strong>{{ cambio.campo }}:</strong>
+                    <span class="text-danger">“{{ cambio.antes }}”</span> → 
+                    <span class="text-success">“{{ cambio.despues }}”</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted mb-0">Sin cambios detectados en campos relevantes.</p>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+
+
+
+{% if notas %}
+<div class="card mx-auto mt-4" style="max-width: 800px;">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Notas internas</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for nota in notas %}
+        <li class="list-group-item">
+            <strong>{{ nota.creado_por }}</strong>: {{ nota.texto }}<br>
+            <small class="text-muted">{{ nota.creado_en|date:"d/m/Y H:i" }}</small>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No hay notas aún.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

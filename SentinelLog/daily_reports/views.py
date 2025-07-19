@@ -4,6 +4,7 @@ from .forms import DailyReportForm
 from .models import DailyReport
 import PyPDF2
 from django.db.models import Q
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
 def index(request):
@@ -35,8 +36,14 @@ def index(request):
     from investigations.models import InvestigationCase
     cases = InvestigationCase.objects.all()
 
+
+    paginator = Paginator(reports, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'daily_reports/index.html', {
-        'reports': reports,
+        #'reports': reports,
+        'page_obj': page_obj,
         'cases': cases,
         'selected': {
             'report_type': report_type,
