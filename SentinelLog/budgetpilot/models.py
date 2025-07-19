@@ -20,6 +20,7 @@ class Presupuesto(models.Model):
         ('aprobado', 'Aprobado'),
         ('en_ejecucion', 'En ejecución'),
         ('completado', 'Completado'),
+        ('rechazado', 'Rechazado'),
     ]
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
