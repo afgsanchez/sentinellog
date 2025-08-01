@@ -22,7 +22,7 @@ class PresupuestoListView(FilterView):
     context_object_name = 'presupuestos'
     filterset_class = PresupuestoFilter
     ordering = ['-estado', '-fecha']
-    paginate_by = 5  # Mostrar 5 presupuestos por página
+    paginate_by = 10  # Mostrar 5 presupuestos por página
 
 
     def get_context_data(self, **kwargs):

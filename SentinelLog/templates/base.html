@@ -56,6 +56,27 @@
     <header class="d-flex flex-column flex-md-row align-items-center justify-content-between">
         <h1><i class="bi bi-shield-lock-fill"></i> SentinelLog</h1>
 
+        <!-- Generador de códigos de 6 cifras -->
+
+        <div class="d-flex align-items-left">
+            <input type="text" id="codeGenerator" class="form-control w-auto" placeholder="Código de 6 cifras" readonly>
+            <button class="btn btn-primary ms-2" onclick="generarCodigo()">Generar código</button>
+        </div>
+
+        <script>
+            function generarCodigo() {
+                fetch('/dashboard/generar-codigo/')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('codeGenerator').value = data.codigo;
+                    })
+                    .catch(error => console.error('Error al generar el código:', error));
+            }
+        </script>
+
+        <!-- Fin de la sección del generador de códigos de 6 cifras -->
+
+
         <nav class="mt-3 mt-md-0">
             <a href="/dashboard/">Dashboard</a>
             <a href="{% url 'budgetpilot:presupuesto_list' %}">BudgetPilot</a>

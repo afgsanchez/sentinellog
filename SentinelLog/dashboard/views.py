@@ -7,6 +7,8 @@ from traka.models import TrakaKeyUserHistory
 from visionline.models import VisionlineOperator
 from .models import GrupoTraka
 from datetime import date, timedelta
+from django.http import JsonResponse
+from utils.code_generator import generar_codigo_unico
 
 
 def dashboard_view(request):
@@ -37,3 +39,10 @@ def dashboard_view(request):
 
 def index(request):
     return render(request, 'dashboard/index.html')
+
+
+
+def generar_codigo_view(request):
+    if request.method == 'GET':
+        codigo = generar_codigo_unico()
+        return JsonResponse({'codigo': codigo})
