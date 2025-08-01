@@ -3,7 +3,7 @@ import random
 import os
 
 # Ruta relativa segura para guardar los códigos hasheados
-ARCHIVO_CODIGOS = 'codigos_guardados.txt'
+ARCHIVO_CODIGOS = 'codigos_guardados.hash'
 
 def generar_codigo():
     """Genera un código aleatorio de 6 dígitos como cadena."""
