@@ -8,6 +8,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 import io
+from django.db.models import Q
 
 
 class TrakaKeyUserListView(ListView):
@@ -24,8 +25,17 @@ class TrakaKeyUserListView(ListView):
         tipo_llave = self.request.GET.get("tipo_llave")
         activo = self.request.GET.get("activo")
 
+        # if nombre:
+        #     queryset = queryset.filter(nombre__icontains=nombre)
+        
         if nombre:
-            queryset = queryset.filter(nombre__icontains=nombre)
+                filtro = Q(nombre__icontains=nombre)
+                if nombre.isdigit():
+                    filtro |= Q(posicion=int(nombre))
+                queryset = queryset.filter(filtro)
+
+        
+        
         if sistema:
             queryset = queryset.filter(sistema=sistema)
         if departamento:
