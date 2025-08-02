@@ -118,18 +118,34 @@
 
             <script>
                 function generarContrasena() {
-                    const longitud = 12; // Longitud de la contraseña
-                    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
-                    let contrasena = "";
+                    const longitud = 12;
 
-                    for (let i = 0; i < longitud; i++) {
-                        const randomIndex = Math.floor(Math.random() * caracteres.length);
-                        contrasena += caracteres[randomIndex];
+                    const mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    const minusculas = "abcdefghijklmnopqrstuvwxyz";
+                    const numeros = "0123456789";
+                    const simbolos = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+                    const todos = mayusculas + minusculas + numeros + simbolos;
+
+                    // Garantizar al menos un carácter de cada tipo
+                    let contrasena = "";
+                    contrasena += mayusculas[Math.floor(Math.random() * mayusculas.length)];
+                    contrasena += minusculas[Math.floor(Math.random() * minusculas.length)];
+                    contrasena += numeros[Math.floor(Math.random() * numeros.length)];
+                    contrasena += simbolos[Math.floor(Math.random() * simbolos.length)];
+
+                    // Rellenar el resto de la contraseña
+                    for (let i = contrasena.length; i < longitud; i++) {
+                        contrasena += todos[Math.floor(Math.random() * todos.length)];
                     }
+
+                    // Mezclar los caracteres
+                    contrasena = contrasena.split('').sort(() => Math.random() - 0.5).join('');
 
                     document.getElementById('passwordGenerator').value = contrasena;
                 }
             </script>
+
 
             <!-- Fin del generador de contraseñas -->
 
