@@ -56,26 +56,6 @@
     <header class="d-flex flex-column flex-md-row align-items-center justify-content-between">
         <h1><i class="bi bi-shield-lock-fill"></i> SentinelLog</h1>
 
-        <!-- Generador de códigos de 6 cifras -->
-
-        <div class="d-flex align-items-left">
-            <input type="text" id="codeGenerator" class="form-control w-auto" placeholder="Código de 6 cifras" readonly>
-            <button class="btn btn-primary ms-2" onclick="generarCodigo()">Generar código</button>
-        </div>
-
-        <script>
-            function generarCodigo() {
-                fetch('/dashboard/generar-codigo/')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('codeGenerator').value = data.codigo;
-                    })
-                    .catch(error => console.error('Error al generar el código:', error));
-            }
-        </script>
-
-        <!-- Fin de la sección del generador de códigos de 6 cifras -->
-
 
         <nav class="mt-3 mt-md-0">
             <a href="/dashboard/">Dashboard</a>
@@ -94,6 +74,96 @@
                 <a href="/accounts/login/">Login</a>
             {% endif %}
         </nav>
+
+        <!-- Boton Utilidades -->
+        <div class="order-1 order-md-0">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                Utilidades
+            </button>
+        </div>
+
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Utilidades</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p><b>Generador de códigos de 6 cifras únicos.</b></p>
+            <!-- Generador de códigos de 6 cifras -->
+
+            <div class="d-flex align-items-left">
+                <input type="text" id="codeGenerator" class="form-control w-auto" placeholder="Código de 6 cifras" readonly>
+                <button class="btn btn-primary ms-2" onclick="generarCodigo()">Generar código</button>
+            </div>
+
+            <script>
+                function generarCodigo() {
+                    fetch('/dashboard/generar-codigo/')
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('codeGenerator').value = data.codigo;
+                        })
+                        .catch(error => console.error('Error al generar el código:', error));
+                }
+            </script>
+        <!-- Fin de la sección del generador de códigos de 6 cifras -->
+
+            <hr>
+            <p><b>Generador de contraseñas seguras</b></p>
+            <!-- Generador de contraseñas -->
+            <div class="d-flex align-items-left">
+                <input type="text" id="passwordGenerator" class="form-control w-auto" placeholder="Contraseña segura" readonly>
+                <button class="btn btn-primary ms-2" onclick="generarContrasena()">Generar contraseña</button>
+            </div>
+
+            <script>
+                function generarContrasena() {
+                    const longitud = 12; // Longitud de la contraseña
+                    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+                    let contrasena = "";
+
+                    for (let i = 0; i < longitud; i++) {
+                        const randomIndex = Math.floor(Math.random() * caracteres.length);
+                        contrasena += caracteres[randomIndex];
+                    }
+
+                    document.getElementById('passwordGenerator').value = contrasena;
+                }
+            </script>
+
+            <!-- Fin del generador de contraseñas -->
+
+            <hr>
+            <p><b>Codificador / Decodificador Base64</b></p>
+            <!-- Codificador / Decodificador Base64 -->
+            <div class="d-flex align-items-left">
+                <input type="text" id="base64Input" class="form-control w-auto" placeholder="Texto a codificar/decodificar">
+                <button class="btn btn-primary ms-2" onclick="codificarBase64()">Code</button>
+                <button class="btn btn-secondary ms-2" onclick="decodificarBase64()">Decode</button>
+            </div>
+            <script>
+                function codificarBase64() {
+                    const input = document.getElementById('base64Input').value;
+                    const encoded = btoa(input);
+                    document.getElementById('base64Input').value = encoded;
+                }
+
+                function decodificarBase64() {
+                    const input = document.getElementById('base64Input').value;
+                    try {
+                        const decoded = atob(input);
+                        document.getElementById('base64Input').value = decoded;
+                    } catch (e) {
+                        alert('Error al decodificar Base64: ' + e.message);
+                    }
+                }
+            </script>
+            <!-- Fin del codificador / decodificador Base64 -->
+        </div>
+        </div>
+        
+        <!-- Fin Boton Utilidades -->
+
     </header>
 
     <main class="container">
