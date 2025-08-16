@@ -36,7 +36,9 @@
         <div class="row">
             {% for photo in photos %}
                 <div class="col-md-3 mb-2">
-                    <img src="{{ photo.image.url }}" class="img-fluid rounded border" alt="Foto incidente">
+                    <a href="{{ photo.image.url }}" target="_blank">
+                        <img src="{{ photo.image.url }}" class="img-fluid rounded border" alt="Foto incidente">
+                    </a>
                     <div class="small text-muted">
                         Subido por: {{ photo.uploaded_by }}<br>
                         {{ photo.uploaded_at|date:"d/m/Y H:i" }}

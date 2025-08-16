@@ -115,8 +115,8 @@
                 <td>{{ presupuesto.subtotal|formato_europeo }}</td>
                 <td>{{ presupuesto.get_estado_display }}</td>
                 <td class="no-print">
-                    <a href="{% url 'budgetpilot:presupuesto_detail' presupuesto.pk %}" class="btn btn-sm btn-info">Ver</a>
-                    <a href="{% url 'budgetpilot:presupuesto_edit' presupuesto.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'budgetpilot:presupuesto_detail' presupuesto.pk %}" target="blank" class="btn btn-sm btn-info">Ver</a>
+                    <a href="{% url 'budgetpilot:presupuesto_edit' presupuesto.pk %}" target="blank" class="btn btn-sm btn-warning">Editar</a>
                 </td>
             </tr>
             {% empty %}
