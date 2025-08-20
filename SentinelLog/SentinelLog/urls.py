@@ -41,6 +41,7 @@ urlpatterns = [
     path('visionline/', include('visionline.urls')),
     path("traka/", include("traka.urls")),
     path('budgetpilot/', include('budgetpilot.urls')),
+    path('registros_accesos/', include('registros_accesos.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

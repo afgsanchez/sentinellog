@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'budgetpilot',
     'simple_history',
     'django_filters',
+    'registros_accesos',
 
 ]
 
